@@ -44,8 +44,8 @@ public class ProductServiceImpl implements ProductService {
         product.setPrice(requestDTO.getPrice());
         product.setDescription(requestDTO.getDescription());
         product.setStatus(ProductStatus.PENDING);
-        product = productRepository.save(product);
-        return convertToResponseDTO(product);
+        productRepository.save(product);
+        return productMapper.toResponseDTO(product);
     }
 
     @Override
@@ -84,12 +84,14 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void rejectProduct(Long id) {
-        if (!productRepository.existsById(id)) {
-            throw new RuntimeException("Product not found");
-        }
-        productRepository.deleteById(id);
+    public ProductResponseDTO rejectProduct(Long id) {
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        product.setStatus(ProductStatus.REJECTED);
+        product = productRepository.save(product);
+        return convertToResponseDTO(product);
     }
+
 
     private ProductResponseDTO convertToResponseDTO(Product product) {
         ProductResponseDTO responseDTO = new ProductResponseDTO();
