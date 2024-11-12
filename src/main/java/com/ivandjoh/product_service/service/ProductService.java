@@ -20,5 +20,5 @@ public interface ProductService {
 
     ProductResponseDTO approveProduct(Long id);
 
-    void rejectProduct(Long id);
+    ProductResponseDTO rejectProduct(Long id);
 }
