@@ -1,0 +1,30 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: product_management_db
+    environment:
+      MYSQL_ROOT_PASSWORD: root # Password root MySQL
+      MYSQL_DATABASE: product_management # Nama database
+      MYSQL_USER: user # User database
+      MYSQL_PASSWORD: pass123 # Password user
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin_container
+    environment:
+      PMA_HOST: mysql # Host MySQL
+      PMA_PORT: 3306 # Port MySQL
+    ports:
+      - "8080:80" # Akses phpMyAdmin di localhost:8080
+    depends_on:
+      - mysql
+
+volumes:
+  mysql_data:
+    driver: local
